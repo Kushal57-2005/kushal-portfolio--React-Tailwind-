@@ -1,0 +1,32 @@
+[
+  {
+    "name": "IcyCool",
+    "image": "/projects/IcyCool.png",
+    "skills": ["HTML", "CSS", "JavaScript", "GitHub"],
+    "link": "https://icy-cool.vercel.app/"
+  },
+  {
+    "name": "BookMyEvent",
+    "image": "/projects/BookMyEvent.png",
+    "skills": ["React", "Tailwind CSS", "GitHub", "Git"],
+    "link": "https://book-my-event-psi.vercel.app/"
+  },
+  {
+    "name": "CPU Scheduler",
+    "image": "/projects/CPU_Sheduler.png",
+    "skills": ["HTML", "CSS", "JavaScript", "Git", "GitHub"],
+    "link": "https://kushal57-2005.github.io/CPU-Scheduling-Simulator/"
+  },
+  {
+    "name": "Basic Portfolio",
+    "image": "/projects/BasicPortfolio.png",
+    "skills": ["HTML", "CSS", "JavaScript", "GitHub"],
+    "link": "https://mypersonalportfolio-gules.vercel.app/"
+  },
+  {
+    "name": "Hex Code Generator",
+    "image": "/projects/HexCodeGenrator.png",
+    "skills": ["HTML", "CSS", "JavaScript", "GitHub"],
+    "link": "https://kushal57-2005.github.io/hex-code-generator/"
+  }
+]
