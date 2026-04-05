@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, forwardRef, useState, useEffect } from "react";
+import bgImage from "../assets/3155.jpg";
 
 const greetings = [
   "Hello 👋",
@@ -47,7 +48,7 @@ const ScrollHero = forwardRef((props, externalRef) => {
           style={{
             filter: bgBlur,
             scale: bgScale,
-            backgroundImage: "url('/src/assets/3155.jpg')",
+            backgroundImage: `url(${bgImage})`,
           }}
           className="absolute inset-0 bg-cover bg-center"
         />
