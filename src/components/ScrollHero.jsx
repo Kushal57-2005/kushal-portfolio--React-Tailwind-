@@ -22,8 +22,6 @@ const ScrollHero = forwardRef((props, externalRef) => {
   });
   const bgProgress = useTransform(scrollYProgress, [0, 1], [0, 0.5]);
 
-
-
   const bgBlur = useTransform(bgProgress, [0, 1], ["blur(0px)", "blur(8px)"]);
 
   const bgScale = useTransform(bgProgress, [0, 1], [1, 1.15]);
@@ -43,7 +41,7 @@ const ScrollHero = forwardRef((props, externalRef) => {
   }, [scrollYProgress]);
 
   return (
-    <section ref={ref} style={{ height: "300vh" }} className="relative">
+    <section ref={ref} style={{ height: "400vh" }} className="relative">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         <motion.div
           style={{

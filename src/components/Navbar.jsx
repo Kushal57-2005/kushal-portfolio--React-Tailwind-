@@ -20,15 +20,15 @@ export default function Navbar() {
   };
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] md:w-auto max-w-4xl">
-      <div className="bg-white/30 backdrop-blur-md border border-white/20 shadow-lg rounded-full px-5 py-2.5 md:px-6 md:py-3 flex justify-between items-center">
-        <h1 
+    <div className="fixed top-4 left-0 z-50 w-full px-4 md:px-8">
+      <div className="bg-white/30 backdrop-blur-md border border-white/20 shadow-lg rounded-full px-5 py-2.5 md:px-8 md:py-3 flex justify-between items-center w-full">
+        {" "}
+        <h1
           className="text-lg md:text-xl font-bold cursor-pointer text-blue-600 tracking-wide"
           onClick={() => scrollToSection("home")}
         >
           KUSHAL
         </h1>
-
         {/* Desktop nav */}
         <ul className="hidden md:flex gap-8 ml-12 text-base font-medium text-slate-800">
           {nav.map((item) => (
@@ -42,21 +42,28 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
-
         {/* Mobile hamburger */}
-        <button 
+        <button
           className="md:hidden flex flex-col gap-1.5 p-2 cursor-pointer"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
-          <span className={`w-5 h-0.5 bg-slate-800 transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-          <span className={`w-5 h-0.5 bg-slate-800 transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
-          <span className={`w-5 h-0.5 bg-slate-800 transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+          <span
+            className={`w-5 h-0.5 bg-slate-800 transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`}
+          />
+          <span
+            className={`w-5 h-0.5 bg-slate-800 transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`}
+          />
+          <span
+            className={`w-5 h-0.5 bg-slate-800 transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`}
+          />
         </button>
       </div>
 
       {/* Mobile dropdown */}
-      <div className={`md:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-80 mt-2" : "max-h-0"}`}>
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-80 mt-2" : "max-h-0"}`}
+      >
         <ul className="bg-white/80 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl px-5 py-4 flex flex-col gap-3 text-sm font-medium text-slate-800">
           {nav.map((item) => (
             <li

@@ -45,12 +45,13 @@ export default function Projects() {
     if (projects.length === 0) return;
 
     const unsubscribe = scrollYProgress.on("change", (v) => {
-      const SCROLL_PER_PROJECT = 200;
+      const SCROLL_PER_PROJECT = 100;
       const totalVh = projects.length * SCROLL_PER_PROJECT + 100;
       const stickyVh = projects.length * SCROLL_PER_PROJECT;
       const stickyRatio = stickyVh / totalVh;
 
       let progress = v / stickyRatio;
+      if (progress < 0) progress = 0;
       if (progress > 1) progress = 1;
 
       const index = Math.min(
@@ -71,10 +72,10 @@ export default function Projects() {
       ref={ref}
       id="projects"
       className="relative"
-      style={{ height: `${projects.length * 200 + 100}vh` }}
+      style={{ height: `${projects.length * 100 + 100}vh` }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center p-4">
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           <motion.div
             key={currentProject.name}
             initial={{ opacity: 0 }}

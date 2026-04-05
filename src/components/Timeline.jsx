@@ -1,9 +1,7 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 
-/* eslint-disable react/prop-types */
 export default function Timeline() {
   const ref = useRef(null);
   const [timelineData, setTimelineData] = useState([]);
