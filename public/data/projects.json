@@ -24,9 +24,15 @@
     "link": "https://mypersonalportfolio-gules.vercel.app/"
   },
   {
-    "name": "Hex Code Generator",
-    "image": "/projects/HexCodeGenrator.png",
-    "skills": ["HTML", "CSS", "JavaScript", "GitHub"],
-    "link": "https://kushal57-2005.github.io/hex-code-generator/"
+    "name": "FitAI",
+    "image": "/projects/FitAI.png",
+    "skills": ["React", "Tailwind CSS", "JavaScript", "GitHub", "Git"],
+    "link": "https://fitaimern.vercel.app/"
+  },
+  {
+    "name": "Tiffinwala",
+    "image": "/projects/Tiffinwala.png",
+    "skills": ["React", "Tailwind CSS", "TypeScript", "GitHub", "Git"],
+    "link": "https://tiffinwala-kkw.vercel.app/"
   }
 ]
