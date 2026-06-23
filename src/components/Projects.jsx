@@ -2,101 +2,138 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
-};
-
 const cardVariants = {
-  hidden: { opacity: 0, y: 50, scale: 0.96 },
-  visible: {
+  hidden: { opacity: 0, y: 32 },
+  visible: (i) => ({
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: { duration: 0.5, ease: "easeOut" },
-  },
+    transition: { duration: 0.5, ease: "easeOut", delay: i * 0.1 },
+  }),
 };
 
-// Grid span map for bento layout (4-column grid)
-const gridSpans = [
-  { col: "1 / span 2", row: "1 / span 2" }, // [0] Featured: 2×2
-  { col: "3 / span 2", row: "1 / span 1" }, // [1] Wide top-right
-  { col: "1 / span 1", row: "3 / span 1" }, // [2] Small
-  { col: "2 / span 1", row: "3 / span 1" }, // [3] Small
-  { col: "3 / span 2", row: "2 / span 1" }, // [4] Wide bottom-right
-  { col: "3 / span 2", row: "3 / span 1" }, // [5] Wide bottom-right
+// Dashboard UIs crop to top header; banner/hero projects crop to center
+const objectPositions = [
+  "top", // Tiffinwala — show header bar, avoid lower dense content
+  "top", // FitAI — show stats header
+  "center", // IcyCool — open banner, center is perfect
+  "center", // BookMyEvent — hero banner
+  "top", // CPU Scheduler
+  "top", // Basic Portfolio
 ];
 
 function ProjectCard({ project, skillMap, index }) {
-  const span = gridSpans[index];
   return (
     <motion.div
+      custom={index}
       variants={cardVariants}
-      className="group relative overflow-hidden rounded-2xl cursor-pointer shadow-lg col-span-1"
-      style={{
-        minHeight: index === 0 ? "420px" : "220px",
-        gridColumn: span?.col,
-        gridRow: span?.row,
-      }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-60px" }}
+      className="rounded-xl overflow-hidden"
+      style={{ border: "1px solid var(--border)" }}
     >
-      {/* Screenshot background */}
-      <img
-        src={project.image}
-        alt={project.name}
-        className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 ease-in-out group-hover:scale-105"
-      />
+      {/* ── Image area — fixed 16:9, uniform height across all cards ── */}
+      <div
+        className="group relative w-full overflow-hidden"
+        style={{ aspectRatio: "16/9", backgroundColor: "var(--bg-image-container)" }}
+      >
+        {/* Screenshot — covers the 16:9 box, cropped to objectPosition */}
+        <img
+          src={project.image}
+          alt={project.name}
+          className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-[1.03]"
+          style={{ objectPosition: objectPositions[index] }}
+        />
 
-      {/* Static dark gradient at bottom */}
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none" />
+        {/* Hover overlay — dims image, shows tech chips */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 p-5"
+          style={{
+            backgroundColor: "rgba(10,10,15,0.55)",
+            backdropFilter: "blur(2px)",
+          }}
+        >
+          {/* Lime top-border flash */}
+          <div
+            className="absolute top-0 inset-x-0 h-[2px]"
+            style={{ backgroundColor: "#d4ff4f" }}
+          />
 
-      {/* Static title */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 z-10 translate-y-0 group-hover:translate-y-2 transition-transform duration-300">
-        <h3 className="text-white font-bold text-lg leading-tight drop-shadow-lg">
-          {project.name}
-        </h3>
-        <p className="text-white/60 text-xs mt-0.5 flex gap-1 flex-wrap">
-          {project.skills.slice(0, 3).map((s, i) => (
-            <span key={i}>{s}{i < Math.min(project.skills.length, 3) - 1 ? " ·" : ""}</span>
-          ))}
-        </p>
+          {/* Tech chips */}
+          <div className="flex flex-wrap gap-2 justify-center">
+            {project.skills.map((skill, i) => (
+              <div
+                key={i}
+                className="flex items-center gap-1.5 rounded-md px-2.5 py-1 "
+                style={{
+                  border: "1px solid rgba(255,255,255,0.22)",
+                  backgroundColor: "rgba(255,255,255,0.10)",
+                  backdropFilter: "blur(8px)",
+                }}
+              >
+                <img
+                  src={skillMap[skill] || `/skills/${skill.toLowerCase()}.png`}
+                  alt={skill}
+                  className="w-4 h-4 object-contain opacity-80"
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
+                />
+                <span className="text-zinc-400 text-xs font-medium">
+                  {skill}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
-      {/* Hover overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/95 via-indigo-900/90 to-violet-900/95 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 p-5 z-20">
-        <h3 className="text-white font-bold text-xl text-center leading-snug">
-          {project.name}
-        </h3>
-
-        {/* Tech chips */}
-        <div className="flex flex-wrap gap-2 justify-center">
-          {project.skills.map((skill, i) => (
-            <div
-              key={i}
-              className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-2.5 py-1"
-            >
-              <img
-                src={skillMap[skill] || `/skills/${skill.toLowerCase()}.png`}
-                alt={skill}
-                className="w-4 h-4 object-contain"
-                onError={(e) => { e.target.style.display = "none"; }}
-              />
-              <span className="text-white/90 text-xs font-medium">{skill}</span>
-            </div>
-          ))}
+      {/* ── Info strip ─────────────────────────────────────── */}
+      <div
+        className="flex items-center justify-between gap-4 px-4 py-3"
+        style={{
+          backgroundColor: "var(--bg-card)",
+          borderTop: "1px solid var(--border)",
+          borderLeft: "3px solid var(--accent)",
+        }}
+      >
+        {/* Left: name + skills */}
+        <div className="min-w-0">
+          <h3
+            className="text-zinc-900 dark:text-zinc-100 font-bold text-base leading-tight truncate"
+            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            {project.name}
+          </h3>
+          <p className="text-zinc-500 dark:text-zinc-400 text-xs mt-0.5 truncate">
+            {project.skills.join(" · ")}
+          </p>
         </div>
 
-        {/* CTA */}
+        {/* Right: View Live button */}
         <a
           href={project.link}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="mt-1 flex items-center gap-2 bg-white text-blue-900 font-semibold text-sm px-6 py-2.5 rounded-full hover:bg-blue-50 active:scale-95 transition-all shadow-xl"
+          className="shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-all duration-200 active:scale-95"
+          style={{
+            border: "1px solid var(--accent)",
+            color: "var(--accent-text)",
+            backgroundColor: "transparent",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--accent)";
+            e.currentTarget.style.color = "#0a0a0f";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "transparent";
+            e.currentTarget.style.color = "var(--accent-text)";
+          }}
         >
-          <span>View Live</span>
+          View Live
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="w-3.5 h-3.5"
+            className="w-3 h-3"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -135,36 +172,33 @@ export default function Projects() {
   }, []);
 
   return (
-    <section id="projects" className="py-20 px-4 md:px-10 lg:px-16">
+    <section id="projects" className="py-20 md:py-32 px-4 md:px-10 lg:px-16">
       {/* Section header */}
       <motion.div
-        initial={{ opacity: 0, y: -24 }}
+        initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.55 }}
-        className="text-center mb-12"
+        className="mb-12 px-2 md:px-6"
       >
-        <span className="inline-block bg-blue-100 text-blue-700 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-3">
-          Portfolio
-        </span>
-        <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900">
+        <span className="section-label">04 / Work</span>
+        <h2
+          className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-4"
+          style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+        >
+          <span
+            className="inline-block w-1 h-8 md:h-10 rounded-full"
+            style={{ backgroundColor: "var(--accent)" }}
+          />
           My Projects
         </h2>
-        <p className="mt-3 text-slate-500 text-base max-w-lg mx-auto">
-          A collection of things I've built — hover to explore the tech stack.
+        <p className="mt-3 text-zinc-500 dark:text-zinc-400 text-sm max-w-md ml-5">
+          Hover any screenshot to explore the tech stack.
         </p>
-        <div className="mt-4 mx-auto w-14 h-1 rounded-full bg-gradient-to-r from-blue-500 to-violet-600" />
       </motion.div>
 
-      {/* Bento grid */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-60px" }}
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"
-        style={{ gridTemplateRows: "280px 200px 200px" }}
-      >
+      {/* Project cards — 2-column grid, full screenshots */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {projects.map((project, index) => (
           <ProjectCard
             key={project.name}
@@ -173,7 +207,7 @@ export default function Projects() {
             index={index}
           />
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }

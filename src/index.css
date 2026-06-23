@@ -1,6 +1,41 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* Hide scrollbar across all browsers */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Design Tokens ─────────────────────────────────────────── */
+:root {
+  --accent: #d4ff4f;
+  --accent-text: #d4ff4f;
+  --accent-dim: rgba(212, 255, 79, 0.08);
+  --bg: #0a0a0f;
+  --bg-card: #111118;
+  --border: #1e1e2a;
+  --bg-nav: rgba(10, 10, 15, 0.75);
+  --bg-nav-mobile: rgba(17, 17, 24, 0.95);
+  --bg-image-container: #0d0d14;
+  --text-primary: #e4e4e7;
+}
+
+html.light {
+  --accent: #a5cc0e;
+  --accent-text: #4d6600;
+  --accent-dim: rgba(165, 204, 14, 0.15);
+  --bg: #f9f9fb;
+  --bg-card: #ffffff;
+  --border: #e4e4e7;
+  --bg-nav: rgba(249, 249, 251, 0.8);
+  --bg-nav-mobile: rgba(255, 255, 255, 0.96);
+  --bg-image-container: #f4f4f5;
+  --text-primary: #18181b;
+}
+
+/* Express.js logo visibility in dark mode */
+html.dark img[alt="Express"] {
+  filter: invert(1) brightness(2);
+}
+
+/* ─── Base ───────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
@@ -10,25 +45,94 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
-*::-webkit-scrollbar {
-  display: none;
+/* Space Grotesk for all headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
 }
 
-* {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+/* Monospace for labels */
+.font-mono-label {
+  font-family: 'JetBrains Mono', monospace;
 }
+
+/* ─── Grain overlay ──────────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────── */
+*::-webkit-scrollbar { display: none; }
+* { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── Skills marquee ─────────────────────────────────────────── */
 @keyframes scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-scroll { animation: scroll 28s linear infinite; }
+
+/* Fade in/out on edges */
+.fade-edges {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
 }
 
-.animate-scroll {
-  animation: scroll 25s linear infinite;
+/* ─── Timeline pulse ring ────────────────────────────────────── */
+@keyframes pulse-ring {
+  0%   { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(2.8); opacity: 0; }
 }
+
+.dot-active {
+  position: relative;
+}
+
+.dot-active::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  animation: pulse-ring 1.6s ease-out infinite;
+}
+
+/* ─── Section label utility ──────────────────────────────────── */
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+/* ─── Accent color utility ───────────────────────────────────── */
+.text-accent { color: var(--accent); }
+.bg-accent   { background-color: var(--accent); }
+.border-accent { border-color: var(--accent); }

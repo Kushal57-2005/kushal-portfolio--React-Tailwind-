@@ -22,22 +22,16 @@ const ScrollHero = forwardRef((props, externalRef) => {
     offset: ["start start", "end start"],
   });
   const bgProgress = useTransform(scrollYProgress, [0, 1], [0, 0.5]);
-
   const bgBlur = useTransform(bgProgress, [0, 1], ["blur(0px)", "blur(8px)"]);
-
   const bgScale = useTransform(bgProgress, [0, 1], [1, 1.15]);
 
   useEffect(() => {
     const speed = 1;
-
     const unsubscribe = scrollYProgress.on("change", (v) => {
       const boosted = v * speed;
-
       const index = Math.floor(boosted * greetings.length);
-
       setText(greetings[Math.min(index, greetings.length - 1)]);
     });
-
     return () => unsubscribe();
   }, [scrollYProgress]);
 
@@ -53,25 +47,41 @@ const ScrollHero = forwardRef((props, externalRef) => {
           className="absolute inset-0 bg-cover bg-center"
         />
 
-        <div className="absolute inset-0 bg-black/20" />
+        {/* Darker overlay for better text contrast */}
+        <div className="absolute inset-0 bg-black/50" />
 
-        <motion.div
-          className="
-      relative z-10
-      h-full
-      flex items-center justify-center
-      text-white text-center
-    "
-        >
-          <motion.h1
-            key={text}
-            initial={{ opacity: 1, y: 10 }}
-            animate={{ opacity: 1, y: 10 }}
-            transition={{ duration: 0.12 }}
-            className="text-3xl sm:text-4xl md:text-6xl font-bold"
-          >
-            {text}
-          </motion.h1>
+        {/* Bottom fade into dark bg */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-40 pointer-events-none"
+          style={{
+            background: "linear-gradient(to bottom, transparent, var(--bg))",
+          }}
+        />
+
+        <motion.div className="relative z-10 h-full flex items-center justify-center text-white text-center px-6">
+          <div>
+            <p className="section-label mb-4" style={{ color: "var(--accent-text)" }}>
+              00 / Welcome
+            </p>
+            <motion.h1
+              key={text}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.15 }}
+              className="font-bold text-zinc-100"
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: "clamp(2.8rem, 10vw, 7rem)",
+                letterSpacing: "-0.02em",
+                lineHeight: 1.1,
+              }}
+            >
+              {text}
+            </motion.h1>
+            <p className="mt-4 text-zinc-400 text-sm tracking-widest uppercase font-mono-label">
+              scroll to continue
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>

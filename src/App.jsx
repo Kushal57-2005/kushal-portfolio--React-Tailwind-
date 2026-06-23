@@ -39,10 +39,7 @@ export default function App() {
   }, []);
 
   return (
-    <div
-      className="min-h-screen flex flex-col scroll-smooth
-      bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(222,222,227,1)_35%,rgba(227,227,227,1)_100%)]"
-    >
+    <div className="min-h-screen flex flex-col scroll-smooth" style={{ backgroundColor: "var(--bg)" }}>
       <ScrollHero ref={heroRef} />
 
       <nav
@@ -55,7 +52,7 @@ export default function App() {
         <Navbar />
       </nav>
 
-      <main className="flex-1 bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(222,222,227,1)_35%,rgba(227,227,227,1)_100%)]">
+      <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
         <Home />
         <About />
         <Skills />
